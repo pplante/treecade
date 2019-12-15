@@ -1,0 +1,8 @@
+dist
+node_modules
+transpiled
+worker
+.idea
+yarn-error.log
+lib
+/coverage/
