@@ -9,6 +9,7 @@
   "author": "Bowden Kelly",
   "license": "MIT",
   "scripts": {
+    "start": "ts-node src/index.ts",
     "build": "npm run build-ts && npm run lint",
     "test": "jest --forceExit --coverage --verbose",
     "build-ts": "tsc",

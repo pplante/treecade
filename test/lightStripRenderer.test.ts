@@ -1,18 +1,18 @@
 jest.mock('../src/fake281x')
 
-import { GameBoard } from '../src/gameBoard'
+import { SnowflakeAvoider } from 'snowflakeAvoider.ts'
 import { LightStripRenderer } from '../src/lightStripRenderer'
 
 const allOff = '.....'
 
 describe('LightStripRenderer', () => {
-  let board: GameBoard
+  let board: SnowflakeAvoider
   let renderer: LightStripRenderer
 
   const ws281x = require('../src/fake281x')
 
   beforeEach(() => {
-    board = GameBoard.fromArray([allOff, allOff, '.*...', allOff, allOff])
+    board = SnowflakeAvoider.fromArray([allOff, allOff, '.*...', allOff, allOff])
     renderer = new LightStripRenderer(board, 2)
   })
 

@@ -1,12 +1,12 @@
-import { GameBoard } from '../src/gameBoard'
+import { SnowflakeAvoider } from 'snowflakeAvoider.ts'
 
 const allOff = '.....'
 
 describe('GameBoard', () => {
-  let board: GameBoard
+  let board: SnowflakeAvoider
 
   beforeEach(() => {
-    board = new GameBoard(5, 5)
+    board = new SnowflakeAvoider(5, 5)
   })
 
   const mockMath = Object.create(global.Math)

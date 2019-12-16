@@ -1,13 +1,12 @@
 import { terminal as term } from 'terminal-kit'
-import { GameBoard } from './gameBoard'
-import { IGameBoardRenderer } from './IGameBoardRenderer'
+import { GameBoardRenderer } from './GameBoardRenderer'
 
-export class TerminalRenderer implements IGameBoardRenderer {
-  constructor(public readonly gameBoard: GameBoard) {}
-
+export class TerminalRenderer extends GameBoardRenderer {
   public render(): void {
     term.clear()
-    term.cyan(`speed: ${this.gameBoard.gameSpeed}, level: ${this.gameBoard.level}, score: ${this.gameBoard.ticks}\n`)
+    term.cyan(
+      `mode: ${this.gameBoard.constructor.name}, speed: ${this.gameBoard.gameSpeed}, level: ${this.gameBoard.level}, score: ${this.gameBoard.ticks}\n`,
+    )
 
     for (let y = 0; y < this.gameBoard.height; y++) {
       for (let x = 0; x < this.gameBoard.width; x++) {
@@ -22,8 +21,10 @@ export class TerminalRenderer implements IGameBoardRenderer {
       term.nextLine(1)
     }
 
-    const playerMarker = '#'.padStart(this.gameBoard.playerPosition + 1, '\t')
-    term.blue(playerMarker)
-    term.nextLine(2)
+    if (this.gameBoard.renderPlayer) {
+      const playerMarker = '#'.padStart(this.gameBoard.playerPosition + 1, '\t')
+      term.blue(playerMarker)
+      term.nextLine(2)
+    }
   }
 }

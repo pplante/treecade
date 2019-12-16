@@ -1,32 +1,38 @@
+import { EventEmitter } from 'events'
 import { Column } from './column'
+import { FlakeInvaders } from './flakeInvaders'
 
-const LEVEL_TICK_FREQUENCY = 50
-
-export class GameBoard {
-  get isRunning(): boolean {
-    return this.gameRunning
+export class GameBoard extends EventEmitter {
+  get renderPlayer(): boolean {
+    return false
   }
 
   get playerPosition(): number {
     return this.playerPos
   }
 
-  public static fromArray(columnString: string[]): GameBoard {
+  get isRunning(): boolean {
+    return this.gameRunning
+  }
+
+  public static fromArray(columnString: string[]): FlakeInvaders {
     const width = columnString.length
     const height = columnString[0].length
     const columns = columnString.map(val => Column.fromString(val))
 
-    return new GameBoard(height, width, columns)
+    return new FlakeInvaders(height, width, columns)
   }
 
   public readonly columns: Column[]
-  public level: number
   public ticks: number
+  public level: number
   public gameSpeed: number
-  private playerPos: number
-  private gameRunning: boolean
+  protected gameRunning: boolean
+  protected playerPos: number
 
   constructor(public readonly height: number = 40, public readonly width: number = 10, columns: Column[] = null) {
+    super()
+
     if (columns) {
       this.columns = columns
     } else {
@@ -39,40 +45,12 @@ export class GameBoard {
 
     this.ticks = 0
     this.level = 1
-    this.gameSpeed = 5
-    this.playerPos = Math.floor(this.width / 2)
-
+    this.gameSpeed = 3
     this.gameRunning = true
   }
 
   public toString() {
     return this.columns.map(p => p.toString())
-  }
-
-  public tick() {
-    if (!this.isRunning) {
-      return
-    }
-
-    for (const column of this.columns) {
-      column.tick()
-    }
-
-    const playerColumn = this.columns[this.playerPos]
-    if (playerColumn.lastPixel) {
-      this.gameRunning = false
-      return
-    }
-
-    this.ticks += 1
-    if (this.ticks % LEVEL_TICK_FREQUENCY === 0) {
-      this.level += 1
-      this.gameSpeed = Math.max(this.gameSpeed - 0.5, 1.0)
-    }
-
-    if (this.ticks % this.gameSpeed === 0) {
-      this.addFlake()
-    }
   }
 
   public addFlake() {
@@ -81,10 +59,22 @@ export class GameBoard {
   }
 
   public moveRight() {
-    this.playerPos = Math.min(this.playerPos + 1, this.width - 1)
+    // Empty
   }
 
   public moveLeft() {
-    this.playerPos = Math.max(this.playerPos - 1, 0)
+    // Empty
+  }
+
+  public tick() {
+    if (!this.isRunning) {
+      return
+    }
+
+    this.ticks += 1
+
+    for (const column of this.columns) {
+      column.tick()
+    }
   }
 }

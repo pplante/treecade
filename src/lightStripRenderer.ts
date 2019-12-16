@@ -1,5 +1,6 @@
+import { Column } from './column'
 import { GameBoard } from './gameBoard'
-import { IGameBoardRenderer } from './IGameBoardRenderer'
+import { GameBoardRenderer } from './GameBoardRenderer'
 
 let ws281x: any
 try {
@@ -26,11 +27,13 @@ function packRGB(red: number, green: number, blue: number) {
   return (red << 16) | (green << 8) | blue
 }
 
-export class LightStripRenderer implements IGameBoardRenderer {
+export class LightStripRenderer extends GameBoardRenderer {
   public config: IWS281xConfig
 
-  constructor(board: GameBoard, private readonly playerWidth: number = 6) {
-    const leds = (board.height + this.playerWidth) * board.width
+  constructor(gameBoard: GameBoard, private readonly playerWidth: number = 6) {
+    super(gameBoard)
+
+    const leds = (gameBoard.height + this.playerWidth) * gameBoard.width
     this.config = { brightness: 255, dma: 10, gpio: 18, leds, strip: 'rgb' }
 
     ws281x.configure(this.config)
@@ -41,7 +44,7 @@ export class LightStripRenderer implements IGameBoardRenderer {
 
     let i = 0
 
-    board.columns.forEach((column, colIndex) => {
+    this.gameBoard.columns.forEach((column: Column, colIndex: number) => {
       column.pixels.map(pixel => {
         if (pixel) {
           pixels[i] = PURPLE
@@ -50,12 +53,14 @@ export class LightStripRenderer implements IGameBoardRenderer {
         i += 1
       })
 
-      if (colIndex === board.playerPosition) {
-        for (let p = i; p < i + this.playerWidth; p++) {
-          pixels[p] = WHITE
+      if (this.gameBoard.renderPlayer) {
+        if (colIndex === this.gameBoard.playerPosition) {
+          for (let p = i; p < i + this.playerWidth; p++) {
+            pixels[p] = WHITE
+          }
+        } else {
+          i += this.playerWidth
         }
-      } else {
-        i += this.playerWidth
       }
     })
 
