@@ -36,19 +36,19 @@ describe('GameBoard', () => {
     })
 
     // noinspection DuplicatedCode
-    it('should add a new flake every 50 ticks', () => {
+    it('should add a new flake depending on game speed', () => {
       expect(board.toString()).toEqual([allOff, allOff, allOff, allOff, allOff])
 
       for (let i = 0; i < 50; i++) {
         board.tick()
       }
 
-      expect(board.toString()).toEqual([allOff, allOff, '*....', allOff, allOff])
+      expect(board.toString()).toEqual([allOff, allOff, '....*', allOff, allOff])
 
       mockMath.random = () => 0.7
       board.addFlake()
 
-      expect(board.toString()).toEqual([allOff, allOff, '*....', '*....', allOff])
+      expect(board.toString()).toEqual([allOff, allOff, '....*', '*....', allOff])
     })
 
     it('should detect player collisions', () => {
@@ -74,32 +74,16 @@ describe('GameBoard', () => {
       board.moveRight()
       board.moveRight()
       board.moveRight()
-      expect(board.playerPosition).toBe(5)
+      expect(board.playerPosition).toBe(4)
 
       board.moveLeft()
-      expect(board.playerPosition).toBe(4)
+      expect(board.playerPosition).toBe(3)
       board.moveLeft()
       board.moveLeft()
       board.moveLeft()
       board.moveLeft()
       board.moveLeft()
       expect(board.playerPosition).toBe(0)
-    })
-
-    // noinspection DuplicatedCode
-    it('should add a new flake every 50 ticks', () => {
-      mockMath.random = () => 0.5
-
-      for (let i = 0; i < 50; i++) {
-        board.tick()
-      }
-
-      expect(board.toString()).toEqual([allOff, allOff, '*....', allOff, allOff])
-
-      mockMath.random = () => 0.7
-      board.addFlake()
-
-      expect(board.toString()).toEqual([allOff, allOff, '*....', '*....', allOff])
     })
   })
 })

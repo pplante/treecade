@@ -3,6 +3,12 @@ export class Column {
     return this.pixels[this.pixels.length - 1]
   }
 
+  public static fromString(val: string) {
+    const column = new Column(val.length)
+    column.pixels = val.split('').map(v => v === '*')
+    return column
+  }
+
   public pixels: boolean[]
 
   constructor(public readonly height: number) {

@@ -1,5 +1,7 @@
 import { Column } from './column'
 
+const LEVEL_TICK_FREQUENCY = 50
+
 export class GameBoard {
   get isRunning(): boolean {
     return this.gameRunning
@@ -9,20 +11,38 @@ export class GameBoard {
     return this.playerPos
   }
 
+  public static fromArray(columnString: string[]): GameBoard {
+    const width = columnString.length
+    const height = columnString[0].length
+    const columns = columnString.map(val => Column.fromString(val))
+
+    return new GameBoard(height, width, columns)
+  }
+
   public readonly columns: Column[]
-  private ticks: number
+  public level: number
+  public ticks: number
+  public gameSpeed: number
   private playerPos: number
   private gameRunning: boolean
 
-  constructor(public readonly height: number = 40, public readonly width: number = 10) {
-    this.columns = []
-    this.ticks = 0
-    this.playerPos = Math.floor(this.width / 2)
-    this.gameRunning = true
+  constructor(public readonly height: number = 40, public readonly width: number = 10, columns: Column[] = null) {
+    if (columns) {
+      this.columns = columns
+    } else {
+      this.columns = []
 
-    for (let x = 0; x < width; x++) {
-      this.columns[x] = new Column(this.height)
+      for (let x = 0; x < width; x++) {
+        this.columns[x] = new Column(this.height)
+      }
     }
+
+    this.ticks = 0
+    this.level = 1
+    this.gameSpeed = 5
+    this.playerPos = Math.floor(this.width / 2)
+
+    this.gameRunning = true
   }
 
   public toString() {
@@ -45,8 +65,12 @@ export class GameBoard {
     }
 
     this.ticks += 1
+    if (this.ticks % LEVEL_TICK_FREQUENCY === 0) {
+      this.level += 1
+      this.gameSpeed = Math.max(this.gameSpeed - 0.5, 1.0)
+    }
 
-    if (this.ticks % 50 === 0) {
+    if (this.ticks % this.gameSpeed === 0) {
       this.addFlake()
     }
   }
@@ -57,7 +81,7 @@ export class GameBoard {
   }
 
   public moveRight() {
-    this.playerPos = Math.min(this.playerPos + 1, this.width)
+    this.playerPos = Math.min(this.playerPos + 1, this.width - 1)
   }
 
   public moveLeft() {
