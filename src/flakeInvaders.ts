@@ -1,6 +1,6 @@
 import { Column } from './column'
+import { GAME_SPEED_CURVE, INITIAL_GAME_SPEED, LEVEL_UP_FREQUENCY } from './config'
 import { GameBoard } from './gameBoard'
-import { GAME_SPEED_CURVE, INITIAL_GAME_SPEED, LEVEL_UP_FREQUENCY } from './index'
 
 export class FlakeInvaders extends GameBoard {
   private nextLevelUp: number
@@ -20,12 +20,7 @@ export class FlakeInvaders extends GameBoard {
   public tick() {
     super.tick()
 
-    const playerColumn = this.columns[this.playerPos]
-    if (playerColumn.lastPixel) {
-      this.gameRunning = false
-      this.emit('gameOver')
-      return
-    }
+    this.detectCollision()
 
     if (this.score >= this.nextLevelUp) {
       this.level += 1
@@ -37,6 +32,14 @@ export class FlakeInvaders extends GameBoard {
       for (let i = 0; i < Math.ceil(this.level / 3); i++) {
         this.addFlake()
       }
+    }
+  }
+
+  public detectCollision() {
+    const playerColumn = this.columns[this.playerPos]
+    if (playerColumn.lastPixel) {
+      this.gameRunning = false
+      this.emit('gameOver')
     }
   }
 

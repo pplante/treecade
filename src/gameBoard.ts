@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events'
 import { Column } from './column'
-import { FlakeInvaders } from './flakeInvaders'
-import { INITIAL_GAME_SPEED } from './index'
+import { INITIAL_GAME_SPEED } from './config'
 
 export class GameBoard extends EventEmitter {
   get renderPlayer(): boolean {
@@ -16,12 +15,12 @@ export class GameBoard extends EventEmitter {
     return this.gameRunning
   }
 
-  public static fromArray(columnString: string[]): FlakeInvaders {
+  public static fromArray(columnString: string[]): GameBoard {
     const width = columnString.length
     const height = columnString[0].length
     const columns = columnString.map(val => Column.fromString(val))
 
-    return new FlakeInvaders(height, width, columns)
+    return new this(height, width, columns)
   }
 
   public static fromGameBoard(other: GameBoard): GameBoard {

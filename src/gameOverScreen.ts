@@ -1,6 +1,5 @@
 import { Column } from './column'
 import { GameBoard } from './gameBoard'
-import { GAME_FRAME_INTERVAL } from './index'
 
 enum ScreenState {
   wipingClean,
@@ -10,7 +9,6 @@ enum ScreenState {
 
 export class GameOverScreen extends GameBoard {
   private screenState: ScreenState
-  private swipeIndex: number
 
   constructor(height: number = 40, width: number = 10, columns: Column[] = null) {
     super(height, width, columns)
@@ -22,33 +20,30 @@ export class GameOverScreen extends GameBoard {
   public tick() {
     super.tick()
 
-    if (this.gameRunning) {
-      if (this.screenState === ScreenState.wipingClean) {
-        if (!this.hasFlakes) {
-          this.screenState = ScreenState.swipeUp
+    if (this.screenState === ScreenState.wipingClean) {
+      if (!this.hasFlakes) {
+        this.screenState = ScreenState.swipeUp
 
-          for (const column of this.columns) {
-            column.direction = -1
-            column.setAll(false)
-            column.pixels[column.height - 1] = true
-          }
+        for (const column of this.columns) {
+          column.direction = -1
+          column.setAll(false)
+          column.pixels[column.height - 1] = true
         }
-      } else if (this.screenState === ScreenState.swipeDown) {
-        if (!this.hasFlakes) {
-          this.gameRunning = false
-          this.emit('gameOver')
-          return
-        }
-      } else if (this.screenState === ScreenState.swipeUp) {
-        if (!this.hasFlakes) {
-          this.screenState = ScreenState.swipeDown
+      }
+    } else if (this.screenState === ScreenState.swipeUp) {
+      if (!this.hasFlakes) {
+        this.screenState = ScreenState.swipeDown
 
-          for (const column of this.columns) {
-            column.direction = 1
-            column.setAll(false)
-            column.pixels[0] = true
-          }
+        for (const column of this.columns) {
+          column.direction = 1
+          column.setAll(false)
+          column.pixels[0] = true
         }
+      }
+    } else if (this.screenState === ScreenState.swipeDown) {
+      if (!this.hasFlakes) {
+        this.gameRunning = false
+        this.emit('gameOver')
       }
     }
   }

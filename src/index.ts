@@ -1,5 +1,5 @@
 import { terminal as term } from 'terminal-kit'
-import { Column } from './column'
+import { GAME_FRAME_INTERVAL, GAME_HEIGHT, GAME_WIDTH } from './config'
 import { FlakeInvaders } from './flakeInvaders'
 import { GameBoard } from './gameBoard'
 import { GameBoardRenderer } from './GameBoardRenderer'
@@ -11,12 +11,6 @@ import { TerminalRenderer } from './terminalRenderer'
 let gameBoard: GameBoard
 let renderers: GameBoardRenderer[] = []
 let tickTimer: NodeJS.Timeout
-export const GAME_HEIGHT = 10
-export const GAME_WIDTH = 9
-export const LEVEL_UP_FREQUENCY = 10
-export const GAME_SPEED_CURVE = 2.5
-export const GAME_FRAME_INTERVAL = 15
-export const INITIAL_GAME_SPEED = 30
 
 function terminate() {
   term.restoreCursor()
@@ -78,20 +72,16 @@ function begin(board: GameBoard) {
   tickTimer = setInterval(tickGame, GAME_FRAME_INTERVAL)
 }
 
-function startGameOverScreen(columns: Column[]) {
+function startGameOverScreen() {
   const board = GameOverScreen.fromGameBoard(gameBoard)
-  board.on('gameOver', () => {
-    startScreenSaver()
-  })
+  board.on('gameOver', startScreenSaver)
 
   begin(board)
 }
 
 function startGame() {
   const board = new FlakeInvaders(GAME_HEIGHT, GAME_WIDTH)
-  board.on('gameOver', () => {
-    startGameOverScreen(board.columns)
-  })
+  board.on('gameOver', startGameOverScreen)
 
   begin(board)
 }

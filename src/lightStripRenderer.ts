@@ -58,10 +58,10 @@ export class LightStripRenderer extends GameBoardRenderer {
           for (let p = i; p < i + this.playerWidth; p++) {
             pixels[p] = WHITE
           }
-        } else {
-          i += this.playerWidth
         }
       }
+
+      i += this.playerWidth
     })
 
     ws281x.render(pixels)
