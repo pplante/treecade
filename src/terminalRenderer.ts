@@ -5,7 +5,7 @@ export class TerminalRenderer extends GameBoardRenderer {
   public render(): void {
     term.clear()
     term.cyan(
-      `mode: ${this.gameBoard.constructor.name}, speed: ${this.gameBoard.gameSpeed}, level: ${this.gameBoard.level}, score: ${this.gameBoard.ticks}\n`,
+      `mode: ${this.gameBoard.constructor.name}, speed: ${this.gameBoard.gameSpeed}, level: ${this.gameBoard.level}, score: ${this.gameBoard.score}\n`,
     )
 
     for (let y = 0; y < this.gameBoard.height; y++) {

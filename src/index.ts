@@ -11,8 +11,12 @@ import { TerminalRenderer } from './terminalRenderer'
 let gameBoard: GameBoard
 let renderers: GameBoardRenderer[] = []
 let tickTimer: NodeJS.Timeout
-const GAME_HEIGHT = 10
-const GAME_WIDTH = 9
+export const GAME_HEIGHT = 10
+export const GAME_WIDTH = 9
+export const LEVEL_UP_FREQUENCY = 10
+export const GAME_SPEED_CURVE = 2.5
+export const GAME_FRAME_INTERVAL = 15
+export const INITIAL_GAME_SPEED = 30
 
 function terminate() {
   term.restoreCursor()
@@ -71,11 +75,11 @@ function begin(board: GameBoard) {
   gameBoard = board
   renderers = [new TerminalRenderer(gameBoard), new LightStripRenderer(gameBoard)]
 
-  tickTimer = setInterval(tickGame, 100)
+  tickTimer = setInterval(tickGame, GAME_FRAME_INTERVAL)
 }
 
 function startGameOverScreen(columns: Column[]) {
-  const board = new GameOverScreen(GAME_HEIGHT, GAME_WIDTH, columns)
+  const board = GameOverScreen.fromGameBoard(gameBoard)
   board.on('gameOver', () => {
     startScreenSaver()
   })

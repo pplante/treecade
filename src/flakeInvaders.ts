@@ -1,9 +1,10 @@
 import { Column } from './column'
 import { GameBoard } from './gameBoard'
-
-const LEVEL_TICK_FREQUENCY = 50
+import { GAME_SPEED_CURVE, INITIAL_GAME_SPEED, LEVEL_UP_FREQUENCY } from './index'
 
 export class FlakeInvaders extends GameBoard {
+  private nextLevelUp: number
+
   get renderPlayer(): boolean {
     return true
   }
@@ -11,7 +12,8 @@ export class FlakeInvaders extends GameBoard {
   constructor(height: number = 40, width: number = 10, columns: Column[] = null) {
     super(height, width, columns)
 
-    this.gameSpeed = 5
+    this.gameSpeed = INITIAL_GAME_SPEED
+    this.nextLevelUp = LEVEL_UP_FREQUENCY
     this.playerPos = Math.floor(this.width / 2)
   }
 
@@ -25,13 +27,16 @@ export class FlakeInvaders extends GameBoard {
       return
     }
 
-    if (this.ticks % LEVEL_TICK_FREQUENCY === 0) {
+    if (this.score >= this.nextLevelUp) {
       this.level += 1
-      this.gameSpeed = Math.max(this.gameSpeed - 0.5, 1.0)
+      this.nextLevelUp += LEVEL_UP_FREQUENCY
+      this.gameSpeed = Math.max(this.gameSpeed - GAME_SPEED_CURVE, 1.0)
     }
 
     if (this.ticks % this.gameSpeed === 0) {
-      this.addFlake()
+      for (let i = 0; i < Math.ceil(this.level / 3); i++) {
+        this.addFlake()
+      }
     }
   }
 
