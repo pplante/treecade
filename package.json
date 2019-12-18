@@ -22,8 +22,9 @@
     "async": "^3.1.0",
     "dotenv": "^8.2.0",
     "errorhandler": "^1.5.1",
-    "winston": "^3.2.1",
-    "terminal-kit": "latest"
+    "node-hid": "^1.1.0",
+    "terminal-kit": "latest",
+    "winston": "^3.2.1"
   },
   "optionalDependencies": {
     "rpi-ws281x-v2": "latest"
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@types/errorhandler": "^0.0.32",
     "@types/jest": "^24.0.18",
+    "@types/node-hid": "^0.7.3",
     "@types/shelljs": "^0.8.5",
     "@types/supertest": "^2.0.8",
     "@types/terminal-kit": "^1.28.0",

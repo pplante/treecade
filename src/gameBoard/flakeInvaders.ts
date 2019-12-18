@@ -1,5 +1,5 @@
-import { Column } from './column'
-import { GAME_SPEED_CURVE, INITIAL_GAME_SPEED, LEVEL_UP_FREQUENCY } from './config'
+import { Column } from '../column'
+import { GAME_SPEED_CURVE, INITIAL_GAME_SPEED, LEVEL_UP_FREQUENCY } from '../config'
 import { GameBoard } from './gameBoard'
 
 export class FlakeInvaders extends GameBoard {

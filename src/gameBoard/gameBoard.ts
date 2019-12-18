@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
-import { Column } from './column'
-import { INITIAL_GAME_SPEED } from './config'
+import { Column } from '../column'
+import { INITIAL_GAME_SPEED } from '../config'
 
 export class GameBoard extends EventEmitter {
   get renderPlayer(): boolean {

@@ -1,4 +1,4 @@
-import { FlakeInvaders } from '../src/flakeInvaders'
+import { FlakeInvaders } from '../src/gameBoard/flakeInvaders'
 
 const allOff = '.....'
 

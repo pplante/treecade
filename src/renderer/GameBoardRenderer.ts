@@ -1,4 +1,4 @@
-import { GameBoard } from './gameBoard'
+import { GameBoard } from '../gameBoard/gameBoard'
 
 export abstract class GameBoardRenderer {
   constructor(protected readonly gameBoard: GameBoard) {}

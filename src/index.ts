@@ -1,35 +1,42 @@
-import { terminal as term } from 'terminal-kit'
 import { GAME_FRAME_INTERVAL, GAME_HEIGHT, GAME_MANUAL_STEP, GAME_WIDTH } from './config'
-import { FlakeInvaders } from './flakeInvaders'
-import { GameBoard } from './gameBoard'
-import { GameBoardRenderer } from './GameBoardRenderer'
-import { GameOverScreen } from './gameOverScreen'
-import { LightStripRenderer } from './lightStripRenderer'
-import { ScreenSaver } from './screenSaver'
-import { TerminalRenderer } from './terminalRenderer'
+import { FlakeInvaders } from './gameBoard/flakeInvaders'
+import { GameBoard } from './gameBoard/gameBoard'
+import { GameOverScreen } from './gameBoard/gameOverScreen'
+import { ScreenSaver } from './gameBoard/screenSaver'
+import { Joystick } from './input/joystick'
+import { Keyboard } from './input/keyboard'
+import { GameBoardRenderer } from './renderer/GameBoardRenderer'
+import { LightStripRenderer } from './renderer/lightStripRenderer'
+import { TerminalRenderer } from './renderer/terminalRenderer'
 
 let gameBoard: GameBoard
 let renderers: GameBoardRenderer[] = []
 let tickTimer: NodeJS.Timeout
+const keyboardInput = new Keyboard()
+let joystickInput: Joystick
+
+keyboardInput.on('button', inputHandler)
+if (Joystick.supportedDevices().length > 0) {
+  joystickInput = new Joystick()
+  joystickInput.on('button', inputHandler)
+}
 
 function terminate() {
-  term.restoreCursor()
-  term.grabInput(false)
+  keyboardInput.dispose()
+
+  if (joystickInput) {
+    joystickInput.dispose()
+  }
+
   setTimeout(() => {
     process.exit()
   }, 100)
 }
 
-term.bold.cyan('Type anything on the keyboard...\n')
-term.green('Hit CTRL-C to quit.\n\n')
-
-term.grabInput({ mouse: 'button' })
-term.hideCursor()
-
-term.on('key', (name: string) => {
-  if (name === 'CTRL_C') {
+function inputHandler(key: string) {
+  if (key === 'CTRL_C') {
     terminate()
-  } else if (name === 's') {
+  } else if (key === 's' || key === 'K1') {
     if (gameBoard instanceof FlakeInvaders && gameBoard.isRunning) {
       return
     }
@@ -38,19 +45,19 @@ term.on('key', (name: string) => {
   }
 
   if (gameBoard && gameBoard.isRunning) {
-    if (name === 'n' && GAME_MANUAL_STEP) {
+    if (key === 'n' && GAME_MANUAL_STEP) {
       tickGame()
     }
 
-    if (name === 'LEFT') {
+    if (key === 'LEFT') {
       gameBoard.moveLeft()
-    } else if (name === 'RIGHT') {
+    } else if (key === 'RIGHT') {
       gameBoard.moveRight()
     }
 
     renderGame()
   }
-})
+}
 
 function renderGame() {
   renderers.map(r => r.render())
@@ -63,7 +70,6 @@ function tickGame() {
     renderGame()
   } else {
     clearInterval(tickTimer)
-    term.brightRed('game over!\n\n')
   }
 }
 

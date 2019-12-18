@@ -1,6 +1,6 @@
-import { Column } from './column'
-import { GAME_HEIGHT, GAME_PLAYER_WIDTH, GAME_SKIP_WIDTH, GAME_WIDTH } from './config'
-import { GameBoard } from './gameBoard'
+import { Column } from '../column'
+import { GAME_HEIGHT, GAME_PLAYER_WIDTH, GAME_SKIP_WIDTH, GAME_WIDTH } from '../config'
+import { GameBoard } from '../gameBoard/gameBoard'
 import { GameBoardRenderer } from './GameBoardRenderer'
 
 let ws281x: any
@@ -9,7 +9,7 @@ try {
   ws281x = require('rpi-ws281x-v2')
 } catch (err) {
   // tslint:disable-next-line:no-var-requires
-  ws281x = require('../src/fake281x')
+  ws281x = require('../util/fake281x')
 }
 
 interface IWS281xConfig {

@@ -1,4 +1,4 @@
-import { Column } from './column'
+import { Column } from '../column'
 import { GameBoard } from './gameBoard'
 
 enum ScreenState {

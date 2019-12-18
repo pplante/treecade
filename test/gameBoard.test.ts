@@ -1,4 +1,4 @@
-import { GameBoard } from '../src/gameBoard'
+import { GameBoard } from '../src/gameBoard/gameBoard'
 
 const allOff = '.....'
 
