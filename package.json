@@ -16,7 +16,7 @@
     "watch-ts": "tsc -w",
     "lint": "tslint -p tsconfig.json",
     "format": "prettier --write '**/*.{ts,js,css,json,md}'",
-    "copy-to-pi": "rsync -avr --exclude 'node_modules/' * pi@192.168.7.189:~/treecade"
+    "copy-to-pi": "tsc && rsync -avr --exclude 'node_modules/' * pi@192.168.7.189:~/treecade"
   },
   "dependencies": {
     "async": "^3.1.0",
@@ -24,10 +24,12 @@
     "errorhandler": "^1.5.1",
     "node-hid": "^1.1.0",
     "terminal-kit": "latest",
+    "throttle-debounce": "^2.1.0",
     "winston": "^3.2.1"
   },
   "optionalDependencies": {
-    "rpi-ws281x-v2": "latest"
+    "rpi-ws281x-v2": "latest",
+    "lcdi2c": "latest"
   },
   "devDependencies": {
     "@types/errorhandler": "^0.0.32",
@@ -36,6 +38,7 @@
     "@types/shelljs": "^0.8.5",
     "@types/supertest": "^2.0.8",
     "@types/terminal-kit": "^1.28.0",
+    "@types/throttle-debounce": "^2.1.0",
     "@types/winston": "^2.4.4",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",

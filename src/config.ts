@@ -2,8 +2,8 @@ export const GAME_MANUAL_STEP = process.env.STEP !== undefined
 
 export const GAME_HEIGHT = 5
 export const GAME_WIDTH = 5
-export const GAME_PLAYER_WIDTH = 1
-export const GAME_SKIP_WIDTH = 3
+export const PLAYER_SIZE = 1
+export const LED_SKIP_WIDTH = 3
 export const LEVEL_UP_FREQUENCY = 10
 export const GAME_SPEED_CURVE = 2.5
 

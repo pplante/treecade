@@ -10,7 +10,7 @@ enum ScreenState {
 export class GameOverScreen extends GameBoard {
   private screenState: ScreenState
 
-  constructor(height: number = 40, width: number = 10, columns: Column[] = null) {
+  constructor(height: number, width: number, columns: Column[] = null) {
     super(height, width, columns)
 
     this.gameSpeed = 5

@@ -1,7 +1,7 @@
-jest.mock('../src/fake281x')
-
 import { GameBoard } from '../src/gameBoard/gameBoard'
 import { LightStripRenderer } from '../src/renderer/lightStripRenderer'
+
+jest.mock('../src/util/fake281x')
 
 const allOff = '.....'
 
@@ -14,7 +14,8 @@ describe('LightStripRenderer', () => {
   beforeEach(() => {
     board = GameBoard.fromArray([allOff, allOff, '.*...', allOff, allOff])
     board.gameSpeed = 15
-    renderer = new LightStripRenderer(board, 2)
+    LightStripRenderer.initStrip(5, 5, 1, 1)
+    renderer = new LightStripRenderer(board)
   })
 
   describe('#render', () => {

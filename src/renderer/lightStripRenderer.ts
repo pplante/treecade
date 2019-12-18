@@ -1,5 +1,4 @@
 import { Column } from '../column'
-import { GAME_HEIGHT, GAME_PLAYER_WIDTH, GAME_SKIP_WIDTH, GAME_WIDTH } from '../config'
 import { GameBoard } from '../gameBoard/gameBoard'
 import { GameBoardRenderer } from './GameBoardRenderer'
 
@@ -31,14 +30,19 @@ function packRGB(red: number, green: number, blue: number) {
 export class LightStripRenderer extends GameBoardRenderer {
   public static config: IWS281xConfig
 
-  public static initStrip() {
+  public static initStrip(gameHeight: number, gameWidth: number, playerWidth: number, skipWidth: number) {
     if (!LightStripRenderer.config) {
-      const leds = (GAME_HEIGHT + GAME_PLAYER_WIDTH + GAME_SKIP_WIDTH) * GAME_WIDTH
+      const leds = (gameHeight + playerWidth + skipWidth) * gameWidth
       this.config = { brightness: 255, dma: 10, gpio: 18, leds, strip: 'rgb' }
+      this.playerSize = playerWidth
+      this.skipWidth = skipWidth
 
       ws281x.configure(LightStripRenderer.config)
     }
   }
+
+  private static skipWidth: number
+  private static playerSize: number
 
   constructor(gameBoard: GameBoard) {
     super(gameBoard)
@@ -60,13 +64,13 @@ export class LightStripRenderer extends GameBoardRenderer {
 
       if (this.gameBoard.renderPlayer) {
         if (colIndex === this.gameBoard.playerPosition) {
-          for (let p = i; p < i + GAME_PLAYER_WIDTH; p++) {
+          for (let p = i; p < i + LightStripRenderer.playerSize; p++) {
             pixels[p] = WHITE
           }
         }
       }
 
-      i += GAME_PLAYER_WIDTH + GAME_SKIP_WIDTH
+      i += LightStripRenderer.playerSize + LightStripRenderer.skipWidth
     })
 
     ws281x.render(pixels)
