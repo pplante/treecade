@@ -12,9 +12,9 @@ export class TerminalRenderer extends GameBoardRenderer {
       for (let x = 0; x < this.gameBoard.width; x++) {
         const pixel = this.gameBoard.columns[x].pixels[y]
         if (pixel) {
-          term.white('*\t')
+          term.white('*')
         } else {
-          term.green('.\t')
+          term.green('.')
         }
       }
 
@@ -22,7 +22,7 @@ export class TerminalRenderer extends GameBoardRenderer {
     }
 
     if (this.gameBoard.renderPlayer) {
-      const playerMarker = '#'.padStart(this.gameBoard.playerPosition + 1, '\t')
+      const playerMarker = '#'.padStart(this.gameBoard.playerPosition + 1, ' ')
       term.blue(playerMarker)
       term.nextLine(2)
     }

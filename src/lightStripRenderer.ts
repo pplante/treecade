@@ -1,11 +1,12 @@
 import { Column } from './column'
+import { GAME_HEIGHT, GAME_PLAYER_WIDTH, GAME_SKIP_WIDTH, GAME_WIDTH } from './config'
 import { GameBoard } from './gameBoard'
 import { GameBoardRenderer } from './GameBoardRenderer'
 
 let ws281x: any
 try {
   // tslint:disable-next-line:no-var-requires
-  ws281x = require('rpi-ws281x')
+  ws281x = require('rpi-ws281x-v2')
 } catch (err) {
   // tslint:disable-next-line:no-var-requires
   ws281x = require('../src/fake281x')
@@ -28,19 +29,23 @@ function packRGB(red: number, green: number, blue: number) {
 }
 
 export class LightStripRenderer extends GameBoardRenderer {
-  public config: IWS281xConfig
+  public static config: IWS281xConfig
 
-  constructor(gameBoard: GameBoard, private readonly playerWidth: number = 6) {
+  public static initStrip() {
+    if (!LightStripRenderer.config) {
+      const leds = (GAME_HEIGHT + GAME_PLAYER_WIDTH + GAME_SKIP_WIDTH) * GAME_WIDTH
+      this.config = { brightness: 255, dma: 10, gpio: 18, leds, strip: 'rgb' }
+
+      ws281x.configure(LightStripRenderer.config)
+    }
+  }
+
+  constructor(gameBoard: GameBoard) {
     super(gameBoard)
-
-    const leds = (gameBoard.height + this.playerWidth) * gameBoard.width
-    this.config = { brightness: 255, dma: 10, gpio: 18, leds, strip: 'rgb' }
-
-    ws281x.configure(this.config)
   }
 
   public render(): void {
-    const pixels = new Uint32Array(this.config.leds)
+    const pixels = new Uint32Array(LightStripRenderer.config.leds)
 
     let i = 0
 
@@ -55,13 +60,13 @@ export class LightStripRenderer extends GameBoardRenderer {
 
       if (this.gameBoard.renderPlayer) {
         if (colIndex === this.gameBoard.playerPosition) {
-          for (let p = i; p < i + this.playerWidth; p++) {
+          for (let p = i; p < i + GAME_PLAYER_WIDTH; p++) {
             pixels[p] = WHITE
           }
         }
       }
 
-      i += this.playerWidth
+      i += GAME_PLAYER_WIDTH + GAME_SKIP_WIDTH
     })
 
     ws281x.render(pixels)

@@ -1,5 +1,5 @@
 import { terminal as term } from 'terminal-kit'
-import { GAME_FRAME_INTERVAL, GAME_HEIGHT, GAME_WIDTH } from './config'
+import { GAME_FRAME_INTERVAL, GAME_HEIGHT, GAME_MANUAL_STEP, GAME_WIDTH } from './config'
 import { FlakeInvaders } from './flakeInvaders'
 import { GameBoard } from './gameBoard'
 import { GameBoardRenderer } from './GameBoardRenderer'
@@ -38,6 +38,10 @@ term.on('key', (name: string) => {
   }
 
   if (gameBoard && gameBoard.isRunning) {
+    if (name === 'n' && GAME_MANUAL_STEP) {
+      tickGame()
+    }
+
     if (name === 'LEFT') {
       gameBoard.moveLeft()
     } else if (name === 'RIGHT') {
@@ -69,7 +73,11 @@ function begin(board: GameBoard) {
   gameBoard = board
   renderers = [new TerminalRenderer(gameBoard), new LightStripRenderer(gameBoard)]
 
-  tickTimer = setInterval(tickGame, GAME_FRAME_INTERVAL)
+  if (!GAME_MANUAL_STEP) {
+    tickTimer = setInterval(tickGame, GAME_FRAME_INTERVAL)
+  } else {
+    tickGame()
+  }
 }
 
 function startGameOverScreen() {
@@ -90,4 +98,5 @@ function startScreenSaver() {
   begin(new ScreenSaver(GAME_HEIGHT, GAME_WIDTH))
 }
 
+LightStripRenderer.initStrip()
 startScreenSaver()

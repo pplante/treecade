@@ -5,3 +5,7 @@ export function configure() {
 export function render() {
   // empty!
 }
+
+export function reset() {
+  // empty!
+}
