@@ -3,7 +3,6 @@ import { FlakeInvaders } from '../gameBoard/flakeInvaders'
 import { GameBoard } from '../gameBoard/gameBoard'
 import { GameOverScreen } from '../gameBoard/gameOverScreen'
 import { ScreenSaver } from '../gameBoard/screenSaver'
-import { FakeLcd } from '../util/fakeLcd'
 
 import { GameBoardRenderer } from './GameBoardRenderer'
 
@@ -12,7 +11,8 @@ try {
   // tslint:disable-next-line:no-var-requires
   LCD = require('lcdi2c')
 } catch (err) {
-  LCD = FakeLcd
+  // tslint:disable-next-line:no-var-requires
+  LCD = require('../util/fakeLcd')
 }
 
 const EMPTY_LINE = ''.padStart(20, ' ')
@@ -40,10 +40,10 @@ export class LcdRenderer extends GameBoardRenderer {
       this.println(EMPTY_LINE, 3)
       this.println(EMPTY_LINE, 4)
     } else if (this.gameBoard instanceof GameOverScreen) {
-      this.println(center('GAME OVER'), 1)
-      this.println(EMPTY_LINE, 1)
-      this.println(center('BETTER LUCK'), 3)
-      this.println(center('NEXT TIME'), 4)
+      this.println(`score: ${this.gameBoard.score}`, 1)
+      this.println(`level: ${this.gameBoard.level}`, 2)
+      this.println(center('GAME OVER'), 3)
+      this.println(center('PRESS START TO PLAY'), 4)
     } else if (this.gameBoard instanceof ScreenSaver) {
       this.println(EMPTY_LINE, 1)
       this.println(center('PRESS START'), 2)
