@@ -14,7 +14,6 @@ import { ScreenSaver } from './gameBoard/screenSaver'
 import { Joystick } from './input/joystick'
 import { Keyboard } from './input/keyboard'
 import { GameBoardRenderer } from './renderer/GameBoardRenderer'
-import { LcdRenderer } from './renderer/lcdRenderer'
 import { LightStripRenderer } from './renderer/lightStripRenderer'
 import { TerminalRenderer } from './renderer/terminalRenderer'
 import logger from './util/logger'
@@ -91,7 +90,10 @@ function begin(board: GameBoard) {
   clearInterval(tickTimer)
 
   gameBoard = board
-  renderers = [new LcdRenderer(gameBoard), new LightStripRenderer(gameBoard)]
+  renderers = [
+    // new LcdRenderer(gameBoard),
+    new LightStripRenderer(gameBoard),
+  ]
 
   if (TERMINAL_RENDERER) {
     renderers.push(new TerminalRenderer(gameBoard))

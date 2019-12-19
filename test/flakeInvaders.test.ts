@@ -1,4 +1,5 @@
 import { FlakeInvaders } from '../src/gameBoard/flakeInvaders'
+import { getRandomColor } from '../src/util/colors'
 
 const allOff = '.....'
 
@@ -36,7 +37,7 @@ describe('FlakeInvaders', () => {
       expect(board.playerPosition).toBe(2)
       expect(board.isRunning).toBe(true)
 
-      board.columns[2].pixels[board.height - 1] = true
+      board.columns[2].pixels[board.height - 1] = getRandomColor()
       board.detectCollision()
       expect(board.isRunning).toBe(false)
       expect(board.toString()).toEqual([allOff, allOff, '....*', allOff, allOff])

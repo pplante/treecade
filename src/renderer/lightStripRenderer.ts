@@ -1,5 +1,6 @@
 import { Column } from '../column'
 import { GameBoard } from '../gameBoard/gameBoard'
+import { packRGB } from '../util/colors'
 import { GameBoardRenderer } from './GameBoardRenderer'
 
 let ws281x: any
@@ -20,12 +21,6 @@ interface IWS281xConfig {
 }
 
 const WHITE = packRGB(255, 255, 255)
-const PURPLE = packRGB(106, 13, 173)
-
-function packRGB(red: number, green: number, blue: number) {
-  // tslint:disable-next-line:no-bitwise
-  return (red << 16) | (green << 8) | blue
-}
 
 export class LightStripRenderer extends GameBoardRenderer {
   public static config: IWS281xConfig
@@ -54,13 +49,7 @@ export class LightStripRenderer extends GameBoardRenderer {
     let i = 0
 
     this.gameBoard.columns.forEach((column: Column, colIndex: number) => {
-      column.pixels.map(pixel => {
-        if (pixel) {
-          pixels[i] = PURPLE
-        }
-
-        i += 1
-      })
+      column.pixels.map(pixel => (pixels[i++] = pixel))
 
       if (this.gameBoard.renderPlayer) {
         if (colIndex === this.gameBoard.playerPosition) {
