@@ -33,7 +33,7 @@ export class LightStripRenderer extends GameBoardRenderer {
   public static initStrip(gameHeight: number, gameWidth: number, playerWidth: number, skipWidth: number) {
     if (!LightStripRenderer.config) {
       const leds = (gameHeight + playerWidth + skipWidth) * gameWidth
-      this.config = { brightness: 255, dma: 10, gpio: 18, leds, strip: 'rgb' }
+      LightStripRenderer.config = { brightness: 255, dma: 10, gpio: 18, leds, strip: 'rgb' }
       this.playerSize = playerWidth
       this.skipWidth = skipWidth
 

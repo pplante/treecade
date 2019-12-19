@@ -14,6 +14,7 @@ export class GameOverScreen extends GameBoard {
     super(height, width, columns)
 
     this.gameSpeed = 5
+    this.keepScore = false
     this.screenState = ScreenState.wipingClean
   }
 

@@ -6,3 +6,4 @@ worker
 yarn-error.log
 lib
 /coverage/
+/debug.log

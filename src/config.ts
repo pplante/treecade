@@ -1,4 +1,5 @@
 export const GAME_MANUAL_STEP = process.env.STEP !== undefined
+export const TERMINAL_RENDERER = process.env.NO_TERM === undefined
 
 export const GAME_HEIGHT = 5
 export const GAME_WIDTH = 5

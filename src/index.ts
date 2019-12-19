@@ -1,4 +1,12 @@
-import { GAME_FRAME_INTERVAL, GAME_HEIGHT, GAME_MANUAL_STEP, GAME_WIDTH, LED_SKIP_WIDTH, PLAYER_SIZE } from './config'
+import {
+  GAME_FRAME_INTERVAL,
+  GAME_HEIGHT,
+  GAME_MANUAL_STEP,
+  GAME_WIDTH,
+  LED_SKIP_WIDTH,
+  PLAYER_SIZE,
+  TERMINAL_RENDERER,
+} from './config'
 import { FlakeInvaders } from './gameBoard/flakeInvaders'
 import { GameBoard } from './gameBoard/gameBoard'
 import { GameOverScreen } from './gameBoard/gameOverScreen'
@@ -9,14 +17,19 @@ import { GameBoardRenderer } from './renderer/GameBoardRenderer'
 import { LcdRenderer } from './renderer/lcdRenderer'
 import { LightStripRenderer } from './renderer/lightStripRenderer'
 import { TerminalRenderer } from './renderer/terminalRenderer'
+import logger from './util/logger'
 
 let gameBoard: GameBoard
 let renderers: GameBoardRenderer[] = []
 let tickTimer: NodeJS.Timeout
-const keyboardInput = new Keyboard()
+let keyboardInput: Keyboard
+
 let joystickInput: Joystick
 
-keyboardInput.on('button', inputHandler)
+if (TERMINAL_RENDERER) {
+  keyboardInput = new Keyboard()
+  keyboardInput.on('button', inputHandler)
+}
 if (Joystick.supportedDevices().length > 0) {
   joystickInput = new Joystick()
   joystickInput.on('button', inputHandler)
@@ -78,7 +91,13 @@ function begin(board: GameBoard) {
   clearInterval(tickTimer)
 
   gameBoard = board
-  renderers = [new TerminalRenderer(gameBoard), new LcdRenderer(gameBoard), new LightStripRenderer(gameBoard)]
+  renderers = [new LcdRenderer(gameBoard), new LightStripRenderer(gameBoard)]
+
+  if (TERMINAL_RENDERER) {
+    renderers.push(new TerminalRenderer(gameBoard))
+  } else {
+    logger.info(`starting new gameBoard: ${gameBoard.constructor.name}`)
+  }
 
   if (!GAME_MANUAL_STEP) {
     tickTimer = setInterval(tickGame, GAME_FRAME_INTERVAL)

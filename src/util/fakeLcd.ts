@@ -1,4 +1,4 @@
-export class FakeLcd {
+export default class FakeLcd {
   // noinspection JSUnusedGlobalSymbols
   public clear() {
     // empty

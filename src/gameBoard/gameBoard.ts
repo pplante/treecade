@@ -38,6 +38,7 @@ export class GameBoard extends EventEmitter {
   public gameSpeed: number
   protected gameRunning: boolean
   protected playerPos: number
+  protected keepScore: boolean
 
   constructor(public readonly height: number = 40, public readonly width: number = 10, columns: Column[] = null) {
     super()
@@ -53,6 +54,7 @@ export class GameBoard extends EventEmitter {
     }
 
     this.score = 0
+    this.keepScore = true
     this.ticks = 0
     this.level = 1
     this.gameSpeed = INITIAL_GAME_SPEED
@@ -87,7 +89,7 @@ export class GameBoard extends EventEmitter {
       for (const column of this.columns) {
         column.tick()
 
-        if (column.lastPixel) {
+        if (column.lastPixel && this.keepScore) {
           this.score += 1
         }
       }
