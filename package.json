@@ -20,7 +20,7 @@
     "copy-to-pi": "tsc && rsync -avr --exclude 'node_modules/' * pi@treecade.local:~/treecade"
   },
   "dependencies": {
-    "async": "^3.1.0",
+    "async": "^3.2.2",
     "dotenv": "^8.2.0",
     "errorhandler": "^1.5.1",
     "node-hid": "^1.1.0",
